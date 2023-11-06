@@ -1,6 +1,6 @@
 import re
 import sys
-
+import binascii
 
 REG = r"(?:[xw](?:\d+|zr)|sp)"
 WHITE = r"[ \t]*"
@@ -151,11 +151,19 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
-                output_lines[-1] = padd1_instruction
-                nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
-                output_lines.append(nop_instruction)
-            
+                first_reg = parts[3].replace(',', '')
+                second_reg = parts[4].replace(',', '')
+                if (first_reg != second_reg):
+                    notimmediate=second_reg
+                    padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
+                else:
+                    padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
             # 添加一个nop指令
             # nop_instruction = "{:<9} {:<8}nop\n".format(hex(int(parts[0], 16) + 8)[2:], parts[1])
             # output_lines.append(nop_instruction)
@@ -178,10 +186,19 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                padd1_instruction = "{:<7}{:<8}psub1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
-                output_lines[-1] = padd1_instruction
-                nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
-                output_lines.append(nop_instruction)
+                first_reg = parts[3].replace(',', '')
+                second_reg = parts[4].replace(',', '')
+                if (first_reg != second_reg):
+                    notimmediate=second_reg
+                    padd1_instruction = "{:<7}{:<8}psub1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
+                else:
+                    padd1_instruction = "{:<7}{:<8}psub1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
         elif 'and' in line:
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
@@ -201,9 +218,19 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
-                output_lines[-1] = padd1_instruction
-                nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                first_reg = parts[3].replace(',', '')
+                second_reg = parts[4].replace(',', '')
+                if (first_reg != second_reg):
+                    notimmediate=second_reg
+                    padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
+                else:
+                    padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
                 output_lines.append(nop_instruction)
         elif 'or' in line:
             if len(parts)>3:
@@ -224,10 +251,19 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                padd1_instruction = "{:<7}{:<8}por1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
-                output_lines[-1] = padd1_instruction
-                nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
-                output_lines.append(nop_instruction)
+                first_reg = parts[3].replace(',', '')
+                second_reg = parts[4].replace(',', '')
+                if (first_reg != second_reg):
+                    notimmediate=second_reg
+                    padd1_instruction = "{:<7}{:<8}por1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
+                else:
+                    padd1_instruction = "{:<7}{:<8}por1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
         elif 'xor' in line:
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
@@ -247,10 +283,19 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                padd1_instruction = "{:<7}{:<8}pxor1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
-                output_lines[-1] = padd1_instruction
-                nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
-                output_lines.append(nop_instruction)
+                first_reg = parts[3].replace(',', '')
+                second_reg = parts[4].replace(',', '')
+                if (first_reg != second_reg):
+                    notimmediate=second_reg
+                    padd1_instruction = "{:<7}{:<8}pxor1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
+                else:
+                    padd1_instruction = "{:<7}{:<8}pxor1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
+                    output_lines[-1] = padd1_instruction
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    output_lines.append(nop_instruction)
         elif 'str' in line:
             # 对于str指令，只需输出一个nop指令
             nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
@@ -278,11 +323,14 @@ def new_instructions(input_filename):
                 hex_inst_str = str(hex_inst)
                 # print(hex_inst_str)
                 # print(parts[7:15])
+                little_inst=binascii.unhexlify(hex_inst_str)
+                big_inst=little_inst[::-1]
+                big_inst=binascii.hexlify(big_inst).decode('utf-8')
                 parts_list = list(parts)
-                parts_list[7:15] = list(hex_inst_str)
+                parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
                 result.append(new_parts+'\n')
-    with open('res2.txt', 'w') as newfile:
+    with open('res.txt', 'w') as newfile:
         newfile.writelines(result)
 
 if __name__ == "__main__":
