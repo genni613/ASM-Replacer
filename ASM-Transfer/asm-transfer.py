@@ -2,6 +2,7 @@ import re
 import sys
 import binascii
 
+
 REG = r"(?:[xw](?:\d+|zr)|sp)"
 WHITE = r"[ \t]*"
 IMM = r"(?:#?(?:0x)?[0-9a-fA-F]+)"
@@ -24,7 +25,8 @@ def encode_regs(rm:str, rn:str, rt:str):
 	return rm | rn | rt
 
 def encode_reg_imms(imm:int, rn:str, rt:str):
-	imm = imm << 12
+	assert imm & 1 == 0, "imm in padd1 must be even"
+	imm = (imm >> 1) << 10
 	rn = REGENC[rn] << 5
 	rt = REGENC[rt]
 	return imm | rn | rt
@@ -34,24 +36,24 @@ malu1immpat = re.compile(f'(p(?:add|sub|or|xor|and)1){WHITE}({REG}){WHITE},{WHIT
 # movpat = re.compile(f'mov{WHITE}({REG}){WHITE},{WHITE}({IMM})')
 
 malu12_reg_base = {
-	"padd1": 0x2200000,
-	"psub1": 0x2200400,
-	"pand1": 0x2200800,
-	"por1":  0x2200c00,
-	"pxor1": 0x2600000,
-	"padd2": 0x3200000,
-	"psub2": 0x3200400,
-	"pand2": 0x3200800,
-	"por2":  0x3200c00,
-	"pxor2": 0x3600000,
+	"padd1": 0x2000000,
+	"psub1": 0x2200000,
+	"pand1": 0x2400000,
+	"por1":  0x2600000,
+	"pxor1": 0x2800000,
+	"padd2": 0x3000000,
+	"psub2": 0x3200000,
+	"pand2": 0x3400000,
+	"por2":  0x3600000,
+	"pxor2": 0x3800000,
 }
 
 malu1_imm_base = {
 	"padd1": 0x22000000,
-	"psub1": 0x22004000,
-	"pand1": 0x22008000,
-	"por1":  0x2200c000,
-	"pxor1": 0x22400000,
+	"psub1": 0x22200000,
+	"pand1": 0x22400000,
+	"por1":  0x22600000,
+	"pxor1": 0x22800000,
 }
 
 # 要使用此函数，先安装llvm，apt install llvm
@@ -321,11 +323,14 @@ def new_instructions(input_filename):
             if (inst):
                 hex_inst= "%.8x" % inst
                 hex_inst_str = str(hex_inst)
-                # print(hex_inst_str)
-                # print(parts[7:15])
                 little_inst=binascii.unhexlify(hex_inst_str)
                 big_inst=little_inst[::-1]
                 big_inst=binascii.hexlify(big_inst).decode('utf-8')
+                #print(big_inst)
+                # value = struct.unpack('<I', hex_inst_str)[0]
+                # change_value=struct.pack('>I', value)
+                # print(change_value)
+                # print(parts[7:15])
                 parts_list = list(parts)
                 parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
