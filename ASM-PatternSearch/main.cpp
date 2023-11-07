@@ -85,6 +85,13 @@ int main(int argc, char *argv[]){
             
         }
     }
+    if(block.size() >= 3){
+        Pattern_Search search(block, pc, ins);
+        Search_Result res;
+        res = search.find_discontinuous_pattern();
+        tmp_res.push_back(res);
+        count+=res.ins.size();
+    }
     // std::cout<<count<<std::endl;
     for(int i = 0; i < tmp_res.size(); i++){
         for(int j = 0; j < tmp_res[i].ins.size(); j+=3){

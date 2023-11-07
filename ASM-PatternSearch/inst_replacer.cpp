@@ -51,7 +51,7 @@ void Pattern_Search::split_by_basicblock(std::vector<std::string> &source,std::v
     {
         int len = code[i].length();
         
-        if(code[i][len-1]==':'||code[i][0] == 'b')
+        if(code[i][len-1]==':'||code[i][0] == 'b'||i==0)
         {
             
             std::vector<std::string> block;
@@ -380,7 +380,7 @@ Search_Result Pattern_Search::find_discontinuous_pattern(){
                     if(r_code[j].op[0] = 'b') break;
                     for(int k = 0; k < r_code[j].operand.size(); k++){
                         if(ch == r_code[j].operand[k]){
-                            if(r_code[j].op == "ldr"&&ch == r_code[j].operand[0]){
+                            if((r_code[j].op == "ldr"||r_code[j].op == "mov")&&ch == r_code[j].operand[0]){
                                 flag4 = 1;
                                 break;
                             }

@@ -8,8 +8,7 @@ make
 
 3、执行如下命令
 ```bash
-./run.sh res.txt
+./run.sh $input_file $input_asm
 ```
-注：可在run.sh中修改目标elf文件，例：gcc_base.gcc43-64bit
+例：./run.sh res.txt gcc_base.gcc43-64bit
 
-./patch-elf-bfd gcc_base.gcc43-64bit w --addr $add1 $add2
