@@ -8,7 +8,7 @@ make
 
 3、执行如下命令
 ```bash
-./run.sh $input_file $input_asm
+./run.sh $input_file $input_elf
 ```
 例：./run.sh res.txt gcc_base.gcc43-64bit
 
