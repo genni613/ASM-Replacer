@@ -132,11 +132,16 @@ def modify_instructions(input_filename, output_filename):
         check = 0
         parts = line.strip().split()
         if count % 3 == 0:
-           reg_val = " ".join(parts[-2:])
+            if len(parts) == 5:
+                reg_val = " ".join(parts[-1:])
+            elif len(parts) == 6:
+                reg_val = " ".join(parts[-2:])
         # print(reg_val)
         if re.search(r'\badd\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
+                # print(reg)
+                # print(parts)
             else:
                 continue
             immediate = parts[-1]
@@ -144,11 +149,13 @@ def modify_instructions(input_filename, output_filename):
                 # 替换上一条指令为mov指令
                 mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
-                
+                # print(output_lines[-1])
                 # 修改add指令为padd1指令
                 padd1_instruction = "{:<7}{:<8} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
+                # print(output_lines)
                 check = 1
+                    
             # 提取add指令的寄存器和立即数
             if check == 0:
                 reg = parts[3].split(',')[0]
@@ -161,11 +168,14 @@ def modify_instructions(input_filename, output_filename):
                     output_lines[-1] = padd1_instruction
                     nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
+                    # print(output_lines)
                 else:
                     padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
                     nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
+                    # print(output_lines)
+
             # 添加一个nop指令
             # nop_instruction = "{:<9} {:<8}nop\n".format(hex(int(parts[0], 16) + 8)[2:], parts[1])
             # output_lines.append(nop_instruction)
@@ -211,10 +221,12 @@ def modify_instructions(input_filename, output_filename):
                 # 替换上一条指令为mov指令
                 mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
-                
+                # print(output_lines[-1])
                 # 修改and指令为pand1指令
                 padd1_instruction = "{:<7}{:<8} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                # print(padd1_instruction)
                 output_lines.append(padd1_instruction)
+                # print(output_lines)
                 check = 1
             # 提取and指令的寄存器和立即数
             if check == 0:
@@ -231,9 +243,10 @@ def modify_instructions(input_filename, output_filename):
                 else:
                     padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
+                    # print(output_lines[-1])
                     nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
-                output_lines.append(nop_instruction)
+                
         elif 'or' in line:
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
@@ -306,6 +319,7 @@ def modify_instructions(input_filename, output_filename):
             # 如果行不包含需要修改的add指令或str指令，原样写入
             output_lines.append(line)
         count += 1
+        # print(output_lines)
     with open(output_filename, 'w') as outfile:
         outfile.writelines(output_lines)
     
@@ -318,10 +332,12 @@ def new_instructions(input_filename):
             parts = line.strip()
             # print(parts)
             instruction_parts = parts[16:]
-            # print(instruction_parts)
+            # print("222",instruction_parts)
             inst = assemble(instruction_parts)
+            # print("333",inst)
             if (inst):
                 hex_inst= "%.8x" % inst
+                # print(hex_inst)
                 hex_inst_str = str(hex_inst)
                 little_inst=binascii.unhexlify(hex_inst_str)
                 big_inst=little_inst[::-1]
@@ -335,6 +351,7 @@ def new_instructions(input_filename):
                 parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
                 result.append(new_parts+'\n')
+                # print(result)
     with open('res.txt', 'w') as newfile:
         newfile.writelines(result)
 

@@ -7,14 +7,11 @@ vector<Instruction> l_a_s2;
 vector<Instruction> l_a_t_s;
 int cnt = 0;
 void type_check(Instruction& i1, Instruction& i2, Instruction& i3){
-    
     if(i1.operand[0] == i2.operand[1] || i1.operand[0] == i2.operand[2]){
-        if(i2.operand[0] == i3.operand[0]&& i1.operand.size()==i2.operand.size()){
+        
+        if(i2.operand[0] == i3.operand[0]&& i1.operand.size()==i3.operand.size()&&i2.operand.size()==3){
             if(i1.operand.size()==2||(i1.operand.size()==3 && i1.operand[2] == i3.operand[2])){
-                // cout<< i1.s_code<<endl;
-                // cout<< i2.s_code<<endl;
-                // cout<< i3.s_code<<endl;
-                if(i1.operand[0] == i3.operand[0]){
+                if(i1.operand[1] == i3.operand[1]){
                     l_a_s1.emplace_back(i1);
                     l_a_s1.emplace_back(i2);
                     l_a_s1.emplace_back(i3);
@@ -24,21 +21,14 @@ void type_check(Instruction& i1, Instruction& i2, Instruction& i3){
                     l_a_s2.emplace_back(i2);
                     l_a_s2.emplace_back(i3);
                 }
-                    // cnt++;
-
             }
-            
         }
-            
     }
-    
-    if(i1.operand[0] == i2.operand[0] ){
-        if(i2.operand[0] == i3.operand[1]&& i1.operand.size()==i2.operand.size()){
-            // if(i1.operand.size()==2){
+    if(i1.operand[0] == i2.operand[0] &&i2.operand.size()==3){
+        if(i2.operand[0] == i3.operand[1]&& i1.operand.size()==i3.operand.size()){
                 l_a_t_s.emplace_back(i1);
                 l_a_t_s.emplace_back(i2);
                 l_a_t_s.emplace_back(i3);
-            // }
         }
             
     }
@@ -68,7 +58,8 @@ int main(int argc, char *argv[]){
             if(block.size() >= 3){
                 Pattern_Search search(block, pc, ins);
                 Search_Result res;
-                res = search.find_discontinuous_pattern();
+                // std::cout<<"aaaa"<<std::endl;
+                res = search.find_continuous_pattern();
                 tmp_res.push_back(res);
                 count+=res.ins.size();
             }
@@ -78,45 +69,39 @@ int main(int argc, char *argv[]){
         }
         else{
             if(codeline.size()>20){
-                block.emplace_back(codeline.substr(20));
-                pc.emplace_back(codeline.substr(2,6));
-                ins.emplace_back(codeline.substr(10,8));
+                int pc_end = codeline.find(':');
+                int pc_start = pc_end;
+                for(; pc_start>=0; pc_start--){
+                    if(codeline[pc_start] ==' ')
+                        break;
+                }
+                if(pc_end==-1||pc_start==-1) continue;
+                block.emplace_back(codeline.substr(pc_end+12));
+                pc.emplace_back(codeline.substr(pc_start+1,pc_end-pc_start-1));
+                ins.emplace_back(codeline.substr(pc_end+2,8));
             }
             
         }
     }
     if(block.size() >= 3){
-        Pattern_Search search(block, pc, ins);
-        Search_Result res;
-        res = search.find_discontinuous_pattern();
-        tmp_res.push_back(res);
-        count+=res.ins.size();
-    }
-    // std::cout<<count<<std::endl;
+                Pattern_Search search(block, pc, ins);
+                Search_Result res;
+                res = search.find_continuous_pattern();
+                tmp_res.push_back(res);
+                count+=res.ins.size();
+            }
     for(int i = 0; i < tmp_res.size(); i++){
         for(int j = 0; j < tmp_res[i].ins.size(); j+=3){
             type_check(tmp_res[i].ins[j], tmp_res[i].ins[j+1], tmp_res[i].ins[j+2]);
         }
     }
     ifs.close();
-    cout<<l_a_s1.size()<<endl;
-    cout<<l_a_s2.size()<<endl;
-    cout<<l_a_t_s.size()<<endl;
 
-    ofs.open("res.txt", std::ios::out);
-    ofs<<"padd1"<<" "<< l_a_s1.size()<<endl;
+    ofs.open("raw.txt", std::ios::out);
     for(int i = 0; i < l_a_s1.size(); i++){
         ofs<<l_a_s1[i].pc<<" " <<l_a_s1[i].bin<<" " <<l_a_s1[i].s_code<<endl;
     }
     ofs<<endl;
-    ofs<<"padd2"<<" "<< l_a_s2.size()<<endl;
-    for(int i = 0; i < l_a_s2.size(); i++){
-        ofs<<l_a_s2[i].pc<<" " <<l_a_s2[i].bin<<" " <<l_a_s2[i].s_code<<endl;
-    }
-    ofs<<endl;
-    ofs<<"plats"<<" "<< l_a_t_s.size()<<endl;
-    for(int i = 0; i < l_a_t_s.size(); i++){
-        ofs<<l_a_t_s[i].pc<<" " <<l_a_t_s[i].bin<<" " <<l_a_t_s[i].s_code<<endl;
-    }
+
     ofs.close();
 }
