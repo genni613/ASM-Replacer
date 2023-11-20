@@ -7,7 +7,7 @@ def process_file(file_path, output_file):
 
         pattern = re.compile(r'bl.*(\b__mempcpy\b|\b__memcpy\b)')
 
-    with open(output_file, 'a') as out:
+    with open(output_file, 'w') as out:
         for line in lines:
             if re.search(pattern, line):
                 line = line.replace(':', '').replace('\t', ' ')
