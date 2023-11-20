@@ -5,7 +5,7 @@ def process_file(file_path, output_file):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-        pattern = re.compile(r'bl.*(\bexpand_builtin_memset\b|\b__memset\b|\b__mempcpy\b|\b__memcpy\b)')
+        pattern = re.compile(r'bl.*(\b__mempcpy\b|\b__memcpy\b)')
 
     with open(output_file, 'a') as out:
         for line in lines:

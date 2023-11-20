@@ -151,11 +151,11 @@ def modify_instructions(input_filename, output_filename):
             immediate = parts[-1]
             if 'add' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<8}{:<9}mov {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], reg, immediate)
+                mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
                 # print(output_lines[-1])
                 # 修改add指令为padd1指令
-                padd1_instruction = "{:<8}{:<8} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{:<7}{:<8} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 # print(output_lines)
                 check = 1
@@ -168,15 +168,15 @@ def modify_instructions(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=second_reg
-                    padd1_instruction = "{:<8}{:<9}padd1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                     # print(output_lines)
                 else:
-                    padd1_instruction = "{:<8}{:<9}padd1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}padd1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                     # print(output_lines)
 
@@ -191,11 +191,11 @@ def modify_instructions(input_filename, output_filename):
             immediate = parts[-1]
             if 'sub' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<8}{:<9}mov {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], reg, immediate)
+                mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改sub指令为psub1指令
-                padd1_instruction = "{:<8}{:<8} psub1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{:<7}{:<8} psub1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取sub指令的寄存器和立即数
@@ -206,14 +206,14 @@ def modify_instructions(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=second_reg
-                    padd1_instruction = "{:<8}{:<9}psub1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}psub1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<8}{:<9}psub1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}psub1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\band\b', line):
             if len(parts)>3:
@@ -223,11 +223,11 @@ def modify_instructions(input_filename, output_filename):
             immediate = parts[-1]
             if 'and' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<8}{:<9}mov {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], reg, immediate)
+                mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
                 # print(output_lines[-1])
                 # 修改and指令为pand1指令
-                padd1_instruction = "{:<8}{:<8} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{:<7}{:<8} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 # print(padd1_instruction)
                 output_lines.append(padd1_instruction)
                 # print(output_lines)
@@ -236,22 +236,20 @@ def modify_instructions(input_filename, output_filename):
             if check == 0:
                 reg = parts[3].split(',')[0]
                 notimmediate = parts[-1]
-                # print(notimmediate)
                 first_reg = parts[3].replace(',', '')
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=second_reg
-                    padd1_instruction = "{:<8}{:<9}pand1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<8}{:<9}pand1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}pand1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    # print(notimmediate)
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    # print(output_lines[-1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
-                # output_lines.append(nop_instruction)
         elif re.search(r'\bor\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
@@ -260,11 +258,11 @@ def modify_instructions(input_filename, output_filename):
             immediate = parts[-1]
             if 'or' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<8}{:<9}mov {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], reg, immediate)
+                mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改or指令为por1指令
-                padd1_instruction = "{:<8}{:<8} por1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{:<7}{:<8} por1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取or指令的寄存器和立即数
@@ -275,14 +273,14 @@ def modify_instructions(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=second_reg
-                    padd1_instruction = "{:<8}{:<9}por1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}por1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<8}{:<9}por1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}por1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\bxor\b', line):
             if len(parts)>3:
@@ -292,11 +290,11 @@ def modify_instructions(input_filename, output_filename):
             immediate = parts[-1]
             if 'xor' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<8}{:<9}mov {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], reg, immediate)
+                mov_instruction = "{:<7}{:<8}mov {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改or指令为pxor1指令
-                padd1_instruction = "{:<8}{:<8} pxor1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{:<7}{:<8} pxor1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取xor指令的寄存器和立即数
@@ -307,25 +305,27 @@ def modify_instructions(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=second_reg
-                    padd1_instruction = "{:<8}{:<9}pxor1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}pxor1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<8}{:<9}pxor1 {},{}\n".format(output_lines[-1][:7], output_lines[-1][8:16], notimmediate, reg_val)
+                    padd1_instruction = "{:<7}{:<8}pxor1 {},{}\n".format(output_lines[-1][:6], output_lines[-1][7:16], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\bstr\b', line):
             # 对于str指令，只需输出一个nop指令
-            nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+            nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
             output_lines.append(nop_instruction)
         elif 'bl' in line and 'memcpy' in line or 'mempcpy' in line:
-            nop_instruction = "{:<8}{:<8} bl_memcpy\n".format(parts[0], parts[1])
+            nop_instruction = "{:<7}{:<8} bl_memcpy\n".format(parts[0], parts[1])
+            # print(output_lines)
             output_lines.append(nop_instruction)
         elif 'bl' in line and 'memset' in line:
-            nop_instruction = "{:<8}{:<8} bl_memset\n".format(parts[0], parts[1])
+            nop_instruction = "{:<7}{:<8} bl_memset\n".format(parts[0], parts[1])
             output_lines.append(nop_instruction)
+
         else:
             # 如果行不包含需要修改的add指令或str指令，原样写入
             output_lines.append(line)
@@ -357,9 +357,9 @@ def new_instructions(input_filename):
                 # value = struct.unpack('<I', hex_inst_str)[0]
                 # change_value=struct.pack('>I', value)
                 # print(change_value)
-                # print(parts[8:16])
+                # print(parts[7:15])
                 parts_list = list(parts)
-                parts_list[8:16] = list(big_inst)
+                parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
                 result.append(new_parts+'\n')
                 # print(result)
@@ -370,4 +370,3 @@ if __name__ == "__main__":
     # 修改指令
     modify_instructions('raw.txt', 'res.txt')
     new_instructions('res.txt')
-    
