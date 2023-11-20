@@ -118,6 +118,10 @@ def assemble(row):
 		return llvm_asm(row)
 	elif row.strip().startswith("nop"):
 		return 0xd503201f
+	elif row.strip().startswith("bl_memset"):
+		return 0xfce15802
+	elif row.strip().startswith("bl_memcpy"):
+		return 0xfca15802
 	else:
 		return None
 
@@ -179,7 +183,7 @@ def modify_instructions(input_filename, output_filename):
             # 添加一个nop指令
             # nop_instruction = "{:<9} {:<8}nop\n".format(hex(int(parts[0], 16) + 8)[2:], parts[1])
             # output_lines.append(nop_instruction)
-        elif 'sub' in line:
+        elif re.search(r'\bsub\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
             else:
@@ -211,7 +215,7 @@ def modify_instructions(input_filename, output_filename):
                     output_lines[-1] = padd1_instruction
                     nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
-        if 'and' in line:
+        elif re.search(r'\band\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
             else:
@@ -248,7 +252,7 @@ def modify_instructions(input_filename, output_filename):
                     nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 # output_lines.append(nop_instruction)
-        elif 'or' in line:
+        elif re.search(r'\bor\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
             else:
@@ -280,7 +284,7 @@ def modify_instructions(input_filename, output_filename):
                     output_lines[-1] = padd1_instruction
                     nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
-        elif 'xor' in line:
+        elif re.search(r'\bxor\b', line):
             if len(parts)>3:
                 reg = parts[3].split(',')[0]
             else:
@@ -312,9 +316,15 @@ def modify_instructions(input_filename, output_filename):
                     output_lines[-1] = padd1_instruction
                     nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
-        elif 'str' in line:
+        elif re.search(r'\bstr\b', line):
             # 对于str指令，只需输出一个nop指令
             nop_instruction = "{:<8}{:<8} nop\n".format(parts[0], parts[1])
+            output_lines.append(nop_instruction)
+        elif 'bl' in line and 'memcpy' in line or 'mempcpy' in line:
+            nop_instruction = "{:<8}{:<8} bl_memcpy\n".format(parts[0], parts[1])
+            output_lines.append(nop_instruction)
+        elif 'bl' in line and 'memset' in line:
+            nop_instruction = "{:<8}{:<8} bl_memset\n".format(parts[0], parts[1])
             output_lines.append(nop_instruction)
         else:
             # 如果行不包含需要修改的add指令或str指令，原样写入
