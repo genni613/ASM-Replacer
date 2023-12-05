@@ -21,19 +21,13 @@ class Instruction{
     std::string pc;
     std::string s_code;
     std::string bin;
+    bool safe = 0;
     void clear(){
         operand.clear();
         op.clear();
     }
 };
 
-class Search_Result{
-    public:
-    Search_Result(){}
-    ~Search_Result(){}
-    std::vector<Instruction> ins;
-
-};
 
 class Pattern_Search{
     public:
@@ -42,8 +36,9 @@ class Pattern_Search{
     void split_by_basicblock(std::vector<std::string> &source,std::vector<std::string> &pc,std::vector<std::string> &ins);
     void preprocess();  
     bool confict();
-    Search_Result find_discontinuous_pattern();
-    Search_Result find_continuous_pattern();
+    std::vector<Instruction> find_discontinuous_pattern();
+    std::vector<Instruction> find_continuous_pattern();
+    bool is_branch(std::string &s);
     bool is_relate(Instruction &i1, Instruction &i2);
     void getOperand(std::vector<std::string> &str, std::string reg);
     void operandCheck(std::vector<std::string> &str);
