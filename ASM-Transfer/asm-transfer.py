@@ -169,11 +169,11 @@ def modify_instructions_malu1(input_filename, output_filename):
             immediate = parts[-1]
             if 'add' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<7}{:<8} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
+                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
                 output_lines[-1] = mov_instruction
                 # print(output_lines[-1])
                 # 修改add指令为padd1指令
-                padd1_instruction = "{:<7}{:<8} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 # print(output_lines)
                 check = 1
@@ -186,15 +186,15 @@ def modify_instructions_malu1(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=first_reg
-                    padd1_instruction = "{:<7}{:<8} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                     # print(output_lines)
                 else:
-                    padd1_instruction = "{:<7}{:<8} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                     # print(output_lines)
 
@@ -209,11 +209,11 @@ def modify_instructions_malu1(input_filename, output_filename):
             immediate = parts[-1]
             if 'sub' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<7}{:<8} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
+                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改sub指令为psub1指令
-                padd1_instruction = "{:<7}{:<8} psub1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取sub指令的寄存器和立即数
@@ -224,14 +224,14 @@ def modify_instructions_malu1(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=first_reg
-                    padd1_instruction = "{:<7}{:<8} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<7}{:<8} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\band\b', line):
             if len(parts)>3:
@@ -241,11 +241,11 @@ def modify_instructions_malu1(input_filename, output_filename):
             immediate = parts[-1]
             if 'and' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<7}{:<8} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
+                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
                 output_lines[-1] = mov_instruction
                 # print(output_lines[-1])
                 # 修改and指令为pand1指令
-                padd1_instruction = "{:<7}{:<8} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 # print(padd1_instruction)
                 output_lines.append(padd1_instruction)
                 # print(output_lines)
@@ -258,15 +258,15 @@ def modify_instructions_malu1(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=first_reg
-                    padd1_instruction = "{:<7}{:<8} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<7}{:<8} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
                     # print(output_lines[-1])
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\bor\b', line):
             if len(parts)>3:
@@ -276,11 +276,11 @@ def modify_instructions_malu1(input_filename, output_filename):
             immediate = parts[-1]
             if 'or' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<7}{:<8} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
+                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改or指令为por1指令
-                padd1_instruction = "{:<7}{:<8} por1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{} {} por1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取or指令的寄存器和立即数
@@ -291,14 +291,14 @@ def modify_instructions_malu1(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=first_reg
-                    padd1_instruction = "{:<7}{:<8} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<7}{:<8} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\bxor\b', line):
             if len(parts)>3:
@@ -308,11 +308,11 @@ def modify_instructions_malu1(input_filename, output_filename):
             immediate = parts[-1]
             if 'xor' in line and '#' in line:
                 # 替换上一条指令为mov指令
-                mov_instruction = "{:<7}{:<8} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
+                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
                 output_lines[-1] = mov_instruction
                 
                 # 修改or指令为pxor1指令
-                padd1_instruction = "{:<7}{:<8} pxor1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
+                padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
                 output_lines.append(padd1_instruction)
                 check = 1
             # 提取xor指令的寄存器和立即数
@@ -323,18 +323,18 @@ def modify_instructions_malu1(input_filename, output_filename):
                 second_reg = parts[4].replace(',', '')
                 if (first_reg != second_reg):
                     notimmediate=first_reg
-                    padd1_instruction = "{:<7}{:<8} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
                 else:
-                    padd1_instruction = "{:<7}{:<8} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
+                    padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
                     output_lines[-1] = padd1_instruction
-                    nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
                     output_lines.append(nop_instruction)
         elif re.search(r'\bstr\b', line):
             # 对于str指令，只需输出一个nop指令
-            nop_instruction = "{:<7}{:<8} nop\n".format(parts[0], parts[1])
+            nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
             output_lines.append(nop_instruction)
 
         else:
@@ -389,12 +389,12 @@ def modify_instructions_malu2(input_filename, output_filename):
                 reg_arg3="["+reg_t2+","+reg_t1+"]"
             if re.search(r'\bldr\b', line):
                 if '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\badd\b', next_line):
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} padd2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
+                    padd1_instruction = "{} {} padd2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(nop_instruction)
                     #print(output_lines)
                     # check = 1
@@ -403,92 +403,92 @@ def modify_instructions_malu2(input_filename, output_filename):
                 elif len(parts)==5 and re.search(r'\badd\b|\bsub\b|\band\b|\bor\b|\bxor\b', next_line):
                     if 1:
                         #notimmediate=first_reg
-                        padd1_instruction = "{:<7}{:<8} padd2 {},{}\n".format(parts[0], parts[1], reg_delta, reg_val)
+                        padd1_instruction = "{} {} padd2 {},{}\n".format(parts[0], parts[1], reg_delta, reg_val)
                         output_lines.append(padd1_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(second_part[0], second_part[1])
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
                         output_lines.append(nop_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                         output_lines.append(nop_instruction)
 
                 elif len(parts)==6 and '#' in line and len(third_part)==6 and re.search(r'\badd\b', next_line):
                     #print("success")
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
+                    mov_instruction = "{} {} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} padd2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
+                    mov_instruction = "{} {} padd2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
                     output_lines.append(mov_instruction)
 
                 elif '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\bsub\b', next_line):
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} psub2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
+                    padd1_instruction = "{} {} psub2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(nop_instruction)
 
                 elif len(parts)==6 and '#' in line and len(third_part)==6 and re.search(r'\bsub\b', next_line):
                     #print("success")
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
+                    mov_instruction = "{} {} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} psub2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
+                    mov_instruction = "{} {} psub2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
                     output_lines.append(mov_instruction)
 
                 elif '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\band\b', next_line):
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} pand2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
+                    padd1_instruction = "{} {} pand2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(nop_instruction)
 
                 elif len(parts)==6 and '#' in line and len(third_part)==6 and re.search(r'\band\b', next_line):
                     #print("success")
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
+                    mov_instruction = "{} {} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} pand2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
+                    mov_instruction = "{} {} pand2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
                     output_lines.append(mov_instruction)
 
                 elif '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\bor\b', next_line):
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} por2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
+                    padd1_instruction = "{} {} por2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(nop_instruction)
 
                 elif len(parts)==6 and '#' in line and len(third_part)==6 and re.search(r'\bor\b', next_line):
                     #print("success")
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
+                    mov_instruction = "{} {} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} por2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
+                    mov_instruction = "{} {} por2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
                     output_lines.append(mov_instruction)
 
                 elif '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\bxor\b', next_line):
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} pxor2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
+                    padd1_instruction = "{} {} pxor2 {},{}\n".format(second_part[0],second_part[1], reg_delta, reg_arg2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(nop_instruction)
 
                 elif len(parts)==6 and '#' in line and len(third_part)==6 and re.search(r'\bxor\b', next_line):
                     #print("success")
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
+                    mov_instruction = "{} {} add {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_all2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{:<7}{:<8} pxor2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
+                    mov_instruction = "{} {} pxor2 {},{}\n".format(third_part[0], third_part[1],reg_t, reg_arg3)
                     output_lines.append(mov_instruction)
     with open(output_filename, 'w') as outfile:
         outfile.writelines(output_lines)
@@ -540,12 +540,12 @@ def modify_instructions_plats(input_filename, output_filename):
             if re.search(r'\bldr\b', line):
                 if '#' in line and len(parts)==6 and len(third_part)==6:
 
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} add {},{},{}\n".format(second_part[0],second_part[1], reg_t2, reg_delta, reg_addr2)
+                    padd1_instruction = "{} {} add {},{},{}\n".format(second_part[0],second_part[1], reg_t2, reg_delta, reg_addr2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} plats {},{}, {}\n".format(third_part[0], third_part[1], reg_data, reg_t1, reg_t2)
+                    nop_instruction = "{} {} plats {},{}, {}\n".format(third_part[0], third_part[1], reg_data, reg_t1, reg_t2)
                     output_lines.append(nop_instruction)
                     #print(output_lines)
                     # check = 1
@@ -553,11 +553,11 @@ def modify_instructions_plats(input_filename, output_filename):
                 # 提取add指令的寄存器和立即数
                 elif len(parts)==5:
                     if 1:
-                        padd1_instruction = "{:<7}{:<8} plats {},{},{}\n".format(parts[0], parts[1], reg_data, reg_addr1, reg_delta)
+                        padd1_instruction = "{} {} plats {},{},{}\n".format(parts[0], parts[1], reg_data, reg_addr1, reg_delta)
                         output_lines.append(padd1_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(second_part[0], second_part[1])
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
                         output_lines.append(nop_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                         output_lines.append(nop_instruction)
     with open(output_filename, 'w') as outfile:
         outfile.writelines(output_lines)
@@ -609,12 +609,12 @@ def modify_instructions_pll(input_filename, output_filename):
             if re.search(r'\bldr\b', line):
                 if '#' in line and len(parts)==6 and len(third_part)==6:
 
-                    mov_instruction = "{:<7}{:<8} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
+                    mov_instruction = "{} {} add {},{}\n".format(parts[0], parts[1],reg_t1, reg_all)
                     output_lines.append(mov_instruction)
                     # 修改add指令为padd1指令
-                    padd1_instruction = "{:<7}{:<8} add {},{},{}\n".format(second_part[0],second_part[1], reg_data, reg_delta,reg_addr2)
+                    padd1_instruction = "{} {} add {},{},{}\n".format(second_part[0],second_part[1], reg_data, reg_delta,reg_addr2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{:<7}{:<8} pll {},{}, {}\n".format(third_part[0], third_part[1], reg_data, reg_t1, reg_data)
+                    nop_instruction = "{} {} pll {},{}, {}\n".format(third_part[0], third_part[1], reg_data, reg_t1, reg_data)
                     output_lines.append(nop_instruction)
                     #print(output_lines)
                     # check = 1
@@ -624,11 +624,11 @@ def modify_instructions_pll(input_filename, output_filename):
                     if 1:
                         print("in")
                         #notimmediate=first_reg
-                        padd1_instruction = "{:<7}{:<8} pll {},{},{}\n".format(parts[0], parts[1], reg_data, reg_addr1, reg_delta)
+                        padd1_instruction = "{} {} pll {},{},{}\n".format(parts[0], parts[1], reg_data, reg_addr1, reg_delta)
                         output_lines.append(padd1_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(second_part[0], second_part[1])
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
                         output_lines.append(nop_instruction)
-                        nop_instruction = "{:<7}{:<8} nop\n".format(third_part[0], third_part[1])
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                         output_lines.append(nop_instruction)
 
     with open(output_filename, 'w') as outfile:
@@ -642,8 +642,11 @@ def new_instructions(input_filename):
         for line in file:
             # 使用split()函数分割行，以空格为分隔符，默认分割符
             parts = line.strip()
+            # print(parts)
             instruction_parts = parts[16:]
+            # print("222",instruction_parts)
             inst = assemble(instruction_parts)
+            #print("333",inst)
             if (inst):
                 hex_inst= "%.8x" % inst
                 # print(hex_inst)
@@ -651,6 +654,11 @@ def new_instructions(input_filename):
                 little_inst=binascii.unhexlify(hex_inst_str)
                 big_inst=little_inst[::-1]
                 big_inst=binascii.hexlify(big_inst).decode('utf-8')
+                #print(big_inst)
+                # value = struct.unpack('<I', hex_inst_str)[0]
+                # change_value=struct.pack('>I', value)
+                # print(change_value)
+                # print(parts[7:15])
                 parts_list = list(parts)
                 parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
@@ -679,10 +687,13 @@ if __name__ == "__main__":
         modify_instructions_plats('raw_pll.txt', 'res_pll.txt')
         with open('res_pll.txt', 'r') as file4:
             content4 = file4.read()
+    #modify_instructions_pll('raw_pll.txt', 'res_pll.txt')
 
     res_file = content1 + content2 + content3 + content4
     # 合并内容到新文件
     with open('res.txt', 'w') as merged_file:
         merged_file.write(res_file)
+        # merged_file.write(content3)
     # 修改PC值
     new_instructions('res.txt')
+    # new_instructions('res_padd2.txt')
