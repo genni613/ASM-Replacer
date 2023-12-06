@@ -545,7 +545,7 @@ def modify_instructions_plats(input_filename, output_filename):
                     # 修改add指令为padd1指令
                     padd1_instruction = "{} {} add {},{},{}\n".format(second_part[0],second_part[1], reg_t2, reg_delta, reg_addr2)
                     output_lines.append(padd1_instruction)
-                    nop_instruction = "{} {} plats {},{}, {}\n".format(third_part[0], third_part[1], reg_data, reg_t1, reg_t2)
+                    nop_instruction = "{} {} plats {},{}, {}\n".format(third_part[0], third_part[1], reg_t2, reg_t1, reg_data)
                     output_lines.append(nop_instruction)
                     #print(output_lines)
                     # check = 1
@@ -553,7 +553,7 @@ def modify_instructions_plats(input_filename, output_filename):
                 # 提取add指令的寄存器和立即数
                 elif len(parts)==5:
                     if 1:
-                        padd1_instruction = "{} {} plats {},{},{}\n".format(parts[0], parts[1], reg_data, reg_addr1, reg_delta)
+                        padd1_instruction = "{} {} plats {},{},{}\n".format(parts[0], parts[1], reg_delta, reg_addr1, reg_data)
                         output_lines.append(padd1_instruction)
                         nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
                         output_lines.append(nop_instruction)
