@@ -143,205 +143,221 @@ def assemble(row):
 	else:
 		return None
 # 修改指令
+# 修改指令
 def modify_instructions_malu1(input_filename, output_filename):
     with open(input_filename, 'r') as infile:
         lines = infile.readlines()
     
     output_lines = []
-    count = 3
-    for i, line in enumerate(lines):
-        check = 0
+    for i in range(0, len(lines), 3):
+        line=lines[i]
+        next_line=lines[i+1]
+    # for i, line in enumerate(lines):
         parts = line.strip().split()
-        if count % 3 == 0:
-            if len(parts) == 5:
-                reg_val = " ".join(parts[-1:])
-                # print(reg_val)
-            elif len(parts) == 6:
-                reg_val = " ".join(parts[-2:])
-                # print(reg_val)
-        if re.search(r'\badd\b', line):
-            if len(parts)>3:
-                reg = parts[3].split(',')[0]
-                # print(reg)
-                # print(parts)
-            else:
-                continue
-            immediate = parts[-1]
-            if 'add' in line and '#' in line:
-                # 替换上一条指令为mov指令
-                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
-                output_lines[-1] = mov_instruction
-                # print(output_lines[-1])
-                # 修改add指令为padd1指令
-                padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
-                output_lines.append(padd1_instruction)
-                # print(output_lines)
-                check = 1
-                    
-            # 提取add指令的寄存器和立即数
-            if check == 0:
-                reg = parts[3].split(',')[0]
-                notimmediate = parts[-1]
-                first_reg = parts[3].replace(',', '')
-                second_reg = parts[4].replace(',', '')
-                if (first_reg != second_reg):
-                    notimmediate=first_reg
-                    padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                    # print(output_lines)
-                else:
-                    padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                    # print(output_lines)
 
-            # 添加一个nop指令
-            # nop_instruction = "{:<9} {:<8}nop\n".format(hex(int(parts[0], 16) + 8)[2:], parts[1])
-            # output_lines.append(nop_instruction)
-        elif re.search(r'\bsub\b', line):
-            if len(parts)>3:
-                reg = parts[3].split(',')[0]
-            else:
-                continue
-            immediate = parts[-1]
-            if 'sub' in line and '#' in line:
-                # 替换上一条指令为mov指令
-                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
-                output_lines[-1] = mov_instruction
-                
-                # 修改sub指令为psub1指令
-                padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
-                output_lines.append(padd1_instruction)
-                check = 1
-            # 提取sub指令的寄存器和立即数
-            if check == 0:
-                reg = parts[3].split(',')[0]
-                notimmediate = parts[-1]
-                first_reg = parts[3].replace(',', '')
-                second_reg = parts[4].replace(',', '')
-                if (first_reg != second_reg):
-                    notimmediate=first_reg
-                    padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                else:
-                    padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-        elif re.search(r'\band\b', line):
-            if len(parts)>3:
-                reg = parts[3].split(',')[0]
-            else:
-                continue
-            immediate = parts[-1]
-            if 'and' in line and '#' in line:
-                # 替换上一条指令为mov指令
-                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
-                output_lines[-1] = mov_instruction
-                # print(output_lines[-1])
-                # 修改and指令为pand1指令
-                padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
-                # print(padd1_instruction)
-                output_lines.append(padd1_instruction)
-                # print(output_lines)
-                check = 1
-            # 提取and指令的寄存器和立即数
-            if check == 0:
-                reg = parts[3].split(',')[0]
-                notimmediate = parts[-1]
-                first_reg = parts[3].replace(',', '')
-                second_reg = parts[4].replace(',', '')
-                if (first_reg != second_reg):
-                    notimmediate=first_reg
-                    padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                else:
-                    padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    # print(output_lines[-1])
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-        elif re.search(r'\bor\b', line):
-            if len(parts)>3:
-                reg = parts[3].split(',')[0]
-            else:
-                continue
-            immediate = parts[-1]
-            if 'or' in line and '#' in line:
-                # 替换上一条指令为mov指令
-                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
-                output_lines[-1] = mov_instruction
-                
-                # 修改or指令为por1指令
-                padd1_instruction = "{} {} por1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
-                output_lines.append(padd1_instruction)
-                check = 1
-            # 提取or指令的寄存器和立即数
-            if check == 0:
-                reg = parts[3].split(',')[0]
-                notimmediate = parts[-1]
-                first_reg = parts[3].replace(',', '')
-                second_reg = parts[4].replace(',', '')
-                if (first_reg != second_reg):
-                    notimmediate=first_reg
-                    padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                else:
-                    padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-        elif re.search(r'\bxor\b', line):
-            if len(parts)>3:
-                reg = parts[3].split(',')[0]
-            else:
-                continue
-            immediate = parts[-1]
-            if 'xor' in line and '#' in line:
-                # 替换上一条指令为mov指令
-                mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1], reg, immediate)
-                output_lines[-1] = mov_instruction
-                
-                # 修改or指令为pxor1指令
-                padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0],parts[1], reg, reg_val)
-                output_lines.append(padd1_instruction)
-                check = 1
-            # 提取xor指令的寄存器和立即数
-            if check == 0:
-                reg = parts[3].split(',')[0]
-                notimmediate = parts[-1]
-                first_reg = parts[3].replace(',', '')
-                second_reg = parts[4].replace(',', '')
-                if (first_reg != second_reg):
-                    notimmediate=first_reg
-                    padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-                else:
-                    padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], notimmediate, reg_val)
-                    output_lines[-1] = padd1_instruction
-                    nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-                    output_lines.append(nop_instruction)
-        elif re.search(r'\bstr\b', line):
-            # 对于str指令，只需输出一个nop指令
-            nop_instruction = "{} {} nop\n".format(parts[0], parts[1])
-            output_lines.append(nop_instruction)
+        if i+1<len(lines):
+            second_line = lines[i+1]
+        if i+2<len(lines):
+            third_line=lines[i+2]
+        # print(parts)
+        second_part=second_line.strip().split()
+        #print("second_part:",second_part)
+        third_part = third_line.strip().split()
+        if 1:
+            if 1:
+                reg_all= " ".join(parts[-2:])
+                reg_all5=" ".join(parts[-1:])
+                reg_t1 = parts[3].split(',')[0]
+                reg_t2=second_part[3].split(',')[0]
+                reg_t=second_part[4].split(',')[0]
+                #print(reg_t1)
+                reg_delta = " ".join(second_part[-1:]).strip('[]').strip(',')
 
-        else:
-            # 如果行不包含需要修改的add指令或str指令，原样写入
-            output_lines.append(line)
-        count += 1
-        # print(output_lines)
+                reg_addr2=" ".join(third_part[-1:]).strip('[]').strip(',')
+                reg_arg2="["+reg_addr2+","+reg_t1+"]"
+                reg_arg3="["+reg_t2+","+reg_t1+"]"
+            if re.search(r'\bldr\b', line):
+                if '#' in next_line and re.search(r'\badd\b', next_line) and len(parts)==5:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} padd1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                    #print(output_lines)
+                    # check = 1
+                if '#' in next_line and re.search(r'\badd\b', next_line) and len(parts)==6:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} padd1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                    #print(output_lines)
+                    # check = 1
+                        
+                # 提取add指令的寄存器和立即数
+                elif '#' not in next_line and re.search(r'\badd\b', next_line) and len(parts)==5:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all5)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\badd\b', next_line) and len(parts)==6:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} padd1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\bsub\b', next_line) and len(parts)==5:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all5)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\bsub\b', next_line) and len(parts)==6:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} psub1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\band\b', next_line) and len(parts)==5:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all5)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\band\b', next_line) and len(parts)==6:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} pand1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+
+                elif '#' not in next_line and re.search(r'\bor\b', next_line) and len(parts)==5:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all5)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\bor\b', next_line) and len(parts)==6:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} por1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\bxor\b', next_line) and len(parts)==5:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all5)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' not in next_line and re.search(r'\bxor\b', next_line) and len(parts)==6:
+                    if 1:
+                        #notimmediate=first_reg
+                        padd1_instruction = "{} {} pxor1 {},{}\n".format(parts[0], parts[1], reg_delta, reg_all)
+                        output_lines.append(padd1_instruction)
+                        nop_instruction = "{} {} nop\n".format(second_part[0], second_part[1])
+                        output_lines.append(nop_instruction)
+                        nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                        output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bsub\b', next_line) and len(parts)==5:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} psub1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bsub\b', next_line) and len(parts)==6:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} psub1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+
+                elif '#' in next_line and re.search(r'\band\b', next_line) and len(parts)==5:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} pand1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\band\b', next_line) and len(parts)==6:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} pand1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bor\b', next_line) and len(parts)==5:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} por1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bor\b', next_line) and len(parts)==6:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} por1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bxor\b', next_line) and len(parts)==5:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} pxor1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all5)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+                elif '#' in next_line and re.search(r'\bxor\b', next_line) and len(parts)==6:
+                    mov_instruction = "{} {} mov {},{}\n".format(parts[0], parts[1],reg_t1, reg_delta)
+                    output_lines.append(mov_instruction)
+                    # 修改add指令为padd1指令
+                    padd1_instruction = "{} {} pxor1 {},{}\n".format(second_part[0],second_part[1], reg_t1, reg_all)
+                    output_lines.append(padd1_instruction)
+                    nop_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
+                    output_lines.append(nop_instruction)
+
+
+
     with open(output_filename, 'w') as outfile:
         outfile.writelines(output_lines)
     
