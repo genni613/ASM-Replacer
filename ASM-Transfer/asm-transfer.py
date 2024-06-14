@@ -462,7 +462,7 @@ def modify_instructions_malu2(input_filename, output_filename):
                     output_lines.append(mov_instruction)
                     mov_instruction = "{} {} padd2 {},{}\n".format(second_part[0], second_part[1],reg_t2, reg_arg2)
                     output_lines.append(mov_instruction)
-                    mov_instruction = "{} {} nop {},{}\n".format(third_part[0], third_part[1])
+                    mov_instruction = "{} {} nop\n".format(third_part[0], third_part[1])
                     output_lines.append(mov_instruction)
 
                 elif '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\bsub\b', next_line):
@@ -682,23 +682,23 @@ if __name__ == "__main__":
     # 修改指令
     content1 = content2 = content3 = content4 = ""  # 初始化内容变量为空字符串
 
-    if os.path.getsize('raw_malu1.txt') > 0:
-        modify_instructions_malu1('raw_malu1.txt', 'res_malu1.txt')
-        with open('res_malu1.txt', 'r') as file1:
-            content1 = file1.read()
-    if os.path.getsize('raw_malu2.txt') > 0:
-        modify_instructions_malu2('raw_malu2.txt', 'res_malu2.txt')
-        with open('res_malu2.txt', 'r') as file2:
-            content2 = file2.read()
+    # if os.path.getsize('raw_malu1.txt') > 0:
+    #     modify_instructions_malu1('raw_malu1.txt', 'res_malu1.txt')
+    #     with open('res_malu1.txt', 'r') as file1:
+    #         content1 = file1.read()
+    # if os.path.getsize('raw_malu2.txt') > 0:
+    #     modify_instructions_malu2('raw_malu2.txt', 'res_malu2.txt')
+    #     with open('res_malu2.txt', 'r') as file2:
+    #         content2 = file2.read()
     if os.path.getsize('raw_plats.txt') > 0:
         modify_instructions_plats('raw_plats.txt', 'res_plats.txt')
         with open('res_plats.txt', 'r') as file3:
             content3 = file3.read()
-    if os.path.getsize('raw_pll.txt') > 0:
-        modify_instructions_plats('raw_pll.txt', 'res_pll.txt')
-        with open('res_pll.txt', 'r') as file4:
-            content4 = file4.read()
-    modify_instructions_pll('raw_pll.txt', 'res_pll.txt')
+    # if os.path.getsize('raw_pll.txt') > 0:
+    #     modify_instructions_plats('raw_pll.txt', 'res_pll.txt')
+    #     with open('res_pll.txt', 'r') as file4:
+    #         content4 = file4.read()
+    # modify_instructions_pll('raw_pll.txt', 'res_pll.txt')
 
     res_file = content1 + content2 + content3 + content4
     # 合并内容到新文件
