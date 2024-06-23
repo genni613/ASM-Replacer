@@ -402,9 +402,14 @@ def modify_instructions_malu2(input_filename, output_filename):
                 reg_t=second_part[4].split(',')[0]
 
                 reg_delta = " ".join(second_part[-1:]).strip('[]').strip(',')
+                
+                reg_addr1 = " ".join(third_part[-2:]).strip('[]')
+                reg_addr1 = reg_addr1.split(',')[0].strip()
 
+                #print(reg_addr1)
                 reg_addr2=" ".join(third_part[-1:]).strip('[]').strip(',')
-                reg_arg2="["+reg_addr2+","+reg_t1+"]"
+
+                reg_arg2="["+reg_addr1+","+reg_t1+"]"
                 reg_arg3="["+reg_t2+","+reg_t1+"]"
             if re.search(r'\bldr\b', line):
                 if '#' in line and len(parts)==6 and len(third_part)==5 and re.search(r'\badd\b', next_line):
@@ -655,8 +660,9 @@ def new_instructions(input_filename):
             parts = line.strip()
             # print(parts)
             instruction_parts = parts[16:]
-            # print("222",instruction_parts)
+            #print("222",instruction_parts)
             inst = assemble(instruction_parts)
+            
             #print("333",inst)
             if (inst):
                 hex_inst= "%.8x" % inst
@@ -674,31 +680,27 @@ def new_instructions(input_filename):
                 parts_list[7:15] = list(big_inst)
                 new_parts=''.join(parts_list)
                 result.append(new_parts+'\n')
-                # print(result)
+                #print(result)
     with open('res.txt', 'w') as newfile:
         newfile.writelines(result)
+
+def process_file(input_file, output_file, modify_function):
+    if os.path.getsize(input_file) > 0:
+        modify_function(input_file, output_file)
+        with open(output_file, 'r') as file:
+            return file.read()
+    return ""
 
 if __name__ == "__main__":
     # 修改指令
     content1 = content2 = content3 = content4 = ""  # 初始化内容变量为空字符串
 
-    # if os.path.getsize('raw_malu1.txt') > 0:
-    #     modify_instructions_malu1('raw_malu1.txt', 'res_malu1.txt')
-    #     with open('res_malu1.txt', 'r') as file1:
-    #         content1 = file1.read()
-    # if os.path.getsize('raw_malu2.txt') > 0:
-    #     modify_instructions_malu2('raw_malu2.txt', 'res_malu2.txt')
-    #     with open('res_malu2.txt', 'r') as file2:
-    #         content2 = file2.read()
-    if os.path.getsize('raw_plats.txt') > 0:
-        modify_instructions_plats('raw_plats.txt', 'res_plats.txt')
-        with open('res_plats.txt', 'r') as file3:
-            content3 = file3.read()
-    # if os.path.getsize('raw_pll.txt') > 0:
-    #     modify_instructions_plats('raw_pll.txt', 'res_pll.txt')
-    #     with open('res_pll.txt', 'r') as file4:
-    #         content4 = file4.read()
-    # modify_instructions_pll('raw_pll.txt', 'res_pll.txt')
+    content1 = process_file('raw_malu1.txt', 'res_malu1.txt', modify_instructions_malu1)
+    content2 = process_file('raw_malu2.txt', 'res_malu2.txt', modify_instructions_malu2)
+    content3 = process_file('raw_plats.txt', 'res_malu2.txt', modify_instructions_plats)
+    content4 = process_file('raw_pll.txt', 'res_malu2.txt', modify_instructions_pll)
+
+
 
     res_file = content1 + content2 + content3 + content4
     # 合并内容到新文件
