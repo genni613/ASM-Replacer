@@ -5,7 +5,8 @@
 ## ASM-Transfer
 ### 根据上述输出的文本信息，将原始指令转换为新的指令
 * 使用见ASM-Replacer/ASM-Transfer/README.md
-## ASM-Modify
+## ASM-Modify-Newest
 ### 将原始elf文件修改为替换指令后的新elf文件
 * 使用见ASM-Replacer/ASM-Modfiy-Newest/README.md
+* 注：原ASM-Modify已废弃
 
