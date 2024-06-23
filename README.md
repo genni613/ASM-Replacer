@@ -7,5 +7,5 @@
 * 使用见ASM-Replacer/ASM-Transfer/README.md
 ## ASM-Modify
 ### 将原始elf文件修改为替换指令后的新elf文件
-* 使用见ASM-Replacer/ASM-Modfiy/README.md
+* 使用见ASM-Replacer/ASM-Modfiy-Newest/README.md
 
